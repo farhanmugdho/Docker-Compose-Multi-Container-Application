@@ -19,6 +19,8 @@ Open PowerShell and run:
 cd "$HOME\Desktop\docker-multi-container-extracted\docker-multi-container"
 ```
 
+it depends on the pc, in my windows, this command worked
+
 ## 3. Check Project Files
 
 ```powershell

@@ -1,19 +1,19 @@
 
-# 🐳 Docker Multi-Container Application
+# Docker Multi-Container Application
 
 A multi-container application powered by Docker Compose, featuring a Python backend, Nginx frontend, and PostgreSQL database.
 
-## 📌 Project Overview
+## Project Overview
 
 This project uses Docker Compose to build and run three services:
 
-- **Frontend:** Nginx
-- **Backend:** Python 3.12 with Gunicorn
-- **Database:** PostgreSQL 16
+- Frontend: Nginx
+- Backend: Python 3.12 with Gunicorn
+- Database: PostgreSQL 16
 
 All services run inside Docker containers and communicate through Docker networks.
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 - Docker
 - Docker Desktop
@@ -24,7 +24,7 @@ All services run inside Docker containers and communicate through Docker network
 - PostgreSQL 16
 - PowerShell
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
 docker-multi-container/
@@ -49,17 +49,17 @@ docker-multi-container/
 └── README.md
 ```
 
-## ⚙️ Prerequisites
+## Prerequisites
 
 Before starting, install:
 
-1. [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+1. Docker Desktop
 2. Git
 3. Windows PowerShell
 
 Make sure Docker Desktop is running before executing Docker commands.
 
-## 🚀 Installation and Setup
+## Installation and Setup
 
 ### Step 1: Clone the Repository
 
@@ -153,7 +153,7 @@ PostgreSQL listens internally on port 5432.
 
 The backend and database ports are not published to the Windows host in the current configuration.
 
-## 📋 Useful Docker Commands
+## Useful Docker Commands
 
 ### View Running Containers
 
@@ -241,7 +241,7 @@ This preserves the database volume.
 docker compose up -d --build
 ```
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
 ### Problem 1: Docker Engine Is Not Running
 
@@ -307,7 +307,7 @@ View logs:
 docker compose logs --tail=100
 ```
 
-## 🔐 Security Notes
+## Security Notes
 
 - Never commit `.env` to GitHub.
 - Use strong database passwords.
@@ -315,7 +315,7 @@ docker compose logs --tail=100
 - Do not expose database ports publicly without proper security.
 - Keep Docker Desktop updated.
 
-## 📤 Upload Project to GitHub
+## Upload Project to GitHub
 
 Check Git status:
 
@@ -343,7 +343,7 @@ git push origin main
 
 Make sure `.env` is excluded through `.gitignore` before pushing.
 
-## 📊 Current Project Status
+## Current Project Status
 
 The application has been successfully built and started using Docker Compose.
 
@@ -353,27 +353,13 @@ The application has been successfully built and started using Docker Compose.
 | Backend | Python / Gunicorn | Healthy |
 | Database | PostgreSQL 16 | Healthy |
 
-## 🌐 Application URL
+## Application URL
 
 http://localhost:8080
 
-## 👨‍💻 Author
+## Author
 
-**Your Name**
+Your Name
 
-GitHub: [Your GitHub Profile](https://github.com/)
+GitHub: https://github.com/your-username
 
----
-
-⭐ If you find this project useful, consider giving it a star on GitHub!
-
-## Design explanation
-- **Frontend (Nginx)** serves the static page and reverse-proxies `/api/*` to `backend:5000`. It is the only service with a `ports:` mapping (`8080:80`).
-- **Backend (Flask/Gunicorn)** exposes `:5000` only inside Docker (`expose`, no host port). It talks to PostgreSQL by service name `db`.
-- **Database (PostgreSQL 16)** exposes `:5432` only to `backend_net`. Data lives in the named volume `db_data`, so it survives `docker compose down` (removed only with `-v`).
-- **Networks:** `frontend_net` connects frontend and backend. `backend_net` (`internal: true`) connects backend and database, so the frontend cannot reach the database and the database has no outside access. The backend sits on both networks and acts as the only bridge.
-- **Reliability:** healthchecks plus `depends_on: condition: service_healthy` start services in order (db, backend, frontend).
-- **Security:** secrets come from `.env` (git-ignored), backend runs as a non-root user.
-
-## Flow
-Browser -> `localhost:8080` -> Frontend -> `/api/*` -> Backend -> SQL -> Database -> `db_data` volume

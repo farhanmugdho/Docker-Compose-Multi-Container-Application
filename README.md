@@ -227,39 +227,7 @@ List Docker volumes:
 docker volume ls
 ```
 
-## 14. Complete Setup Command Sequence
-
-For a fresh setup, use these commands in order:
-
-```powershell
-# Navigate to project directory
-cd "$HOME\Desktop\docker-multi-container-extracted\docker-multi-container"
-
-# Check project files
-dir -Force
-
-# Create .env if it does not exist
-if (!(Test-Path .env)) {
-    Copy-Item .env.example .env
-}
-
-# Configure environment variables
-notepad .env
-
-# Verify Docker
-docker version
-
-# Build and start containers
-docker compose up -d --build
-
-# Check container status
-docker compose ps
-
-# View logs
-docker compose logs --tail=100
-```
-
-## 15. Application URL
+## 14. Application URL
 
 Once all containers are running successfully, open:
 

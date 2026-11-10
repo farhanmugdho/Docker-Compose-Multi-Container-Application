@@ -1,0 +1,76 @@
+<svg viewBox="0 0 960 560" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif" font-size="14">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <rect width="960" height="560" fill="#ffffff"/>
+  <text x="480" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#0f172a">System Architecture - Docker Compose Multi-Container App</text>
+
+  <!-- Browser -->
+  <rect x="20" y="230" width="120" height="80" rx="10" fill="#e0e7ff" stroke="#4338ca" stroke-width="2"/>
+  <text x="80" y="265" text-anchor="middle" font-weight="bold">Browser</text>
+  <text x="80" y="285" text-anchor="middle" font-size="12">User (host)</text>
+
+  <!-- Docker host -->
+  <rect x="200" y="55" width="745" height="490" rx="14" fill="#f8fafc" stroke="#64748b" stroke-width="2" stroke-dasharray="8 4"/>
+  <text x="215" y="78" font-weight="bold" fill="#475569">Docker Host (Docker Engine)</text>
+
+  <!-- frontend_net -->
+  <rect x="225" y="100" width="470" height="300" rx="12" fill="#ecfdf5" stroke="#059669" stroke-width="2"/>
+  <text x="240" y="122" font-weight="bold" fill="#047857">frontend_net (bridge)</text>
+
+  <!-- backend_net -->
+  <rect x="470" y="200" width="460" height="320" rx="12" fill="#fff7ed" stroke="#ea580c" stroke-width="2" stroke-dasharray="6 3"/>
+  <text x="920" y="222" text-anchor="end" font-weight="bold" fill="#c2410c">backend_net (bridge, internal: true - private)</text>
+
+  <!-- Frontend -->
+  <rect x="250" y="240" width="170" height="100" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="2"/>
+  <text x="335" y="272" text-anchor="middle" font-weight="bold">Frontend</text>
+  <text x="335" y="292" text-anchor="middle" font-size="12">Nginx container</text>
+  <text x="335" y="312" text-anchor="middle" font-size="12">listens :80</text>
+
+  <!-- Backend -->
+  <rect x="520" y="270" width="170" height="100" rx="10" fill="#fde68a" stroke="#b45309" stroke-width="2"/>
+  <text x="605" y="302" text-anchor="middle" font-weight="bold">Backend</text>
+  <text x="605" y="322" text-anchor="middle" font-size="12">Flask + Gunicorn</text>
+  <text x="605" y="342" text-anchor="middle" font-size="12">:5000 (private)</text>
+
+  <!-- DB -->
+  <rect x="750" y="270" width="150" height="100" rx="10" fill="#fed7aa" stroke="#c2410c" stroke-width="2"/>
+  <text x="825" y="302" text-anchor="middle" font-weight="bold">Database</text>
+  <text x="825" y="322" text-anchor="middle" font-size="12">PostgreSQL 16</text>
+  <text x="825" y="342" text-anchor="middle" font-size="12">:5432 (private)</text>
+
+  <!-- Volume -->
+  <ellipse cx="825" cy="465" rx="70" ry="14" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="2"/>
+  <rect x="755" y="465" width="140" height="35" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="2"/>
+  <ellipse cx="825" cy="500" rx="70" ry="14" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="2"/>
+  <rect x="756" y="466" width="138" height="34" fill="#bfdbfe"/>
+  <ellipse cx="825" cy="465" rx="70" ry="14" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="825" y="487" text-anchor="middle" font-weight="bold" font-size="13">db_data (volume)</text>
+  <text x="825" y="535" text-anchor="middle" font-size="11" fill="#1e3a8a">/var/lib/postgresql/data</text>
+
+  <!-- Arrows -->
+  <line x1="140" y1="270" x2="250" y2="285" stroke="#334155" stroke-width="2.5" marker-end="url(#a)"/>
+  <text x="145" y="248" font-size="12" font-weight="bold" fill="#b91c1c">Published port</text>
+  <text x="145" y="263" font-size="12" font-weight="bold" fill="#b91c1c">8080 : 80</text>
+
+  <line x1="420" y1="305" x2="520" y2="320" stroke="#334155" stroke-width="2.5" marker-end="url(#a)"/>
+  <text x="430" y="285" font-size="12">1. /api/* proxy</text>
+  <text x="430" y="300" font-size="12">http://backend:5000</text>
+
+  <line x1="690" y1="320" x2="750" y2="320" stroke="#334155" stroke-width="2.5" marker-end="url(#a)"/>
+  <text x="720" y="310" text-anchor="middle" font-size="12">SQL</text>
+
+  <line x1="825" y1="370" x2="825" y2="451" stroke="#1d4ed8" stroke-width="2.5" marker-end="url(#a)"/>
+  <text x="835" y="415" font-size="12" fill="#1d4ed8">persists data</text>
+
+  <!-- Legend -->
+  <rect x="215" y="420" width="240" height="115" rx="8" fill="#ffffff" stroke="#94a3b8"/>
+  <text x="228" y="440" font-weight="bold" font-size="13">Legend / rules</text>
+  <text x="228" y="460" font-size="12">Frontend: only service with ports:</text>
+  <text x="228" y="478" font-size="12">Backend/DB: expose only, no host port</text>
+  <text x="228" y="496" font-size="12">Frontend cannot reach DB directly</text>
+  <text x="228" y="514" font-size="12">Backend is on both networks (bridge)</text>
+</svg>

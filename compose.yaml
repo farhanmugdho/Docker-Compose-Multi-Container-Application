@@ -1,0 +1,68 @@
+name: multi-container-app
+
+services:
+  frontend:
+    build: ./frontend
+    container_name: app-frontend
+    ports:
+      - "8080:80"            # ONLY published port (host:container)
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - frontend_net
+    restart: unless-stopped
+
+  backend:
+    build: ./backend
+    container_name: app-backend
+    expose:
+      - "5000"               # visible to other containers only, never the host
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ${POSTGRES_DB}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - frontend_net         # reachable by frontend
+      - backend_net          # can reach database
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://localhost:5000/api/health')"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    container_name: app-db
+    expose:
+      - "5432"               # private, no ports: mapping
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - backend_net          # frontend cannot reach this network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+networks:
+  frontend_net:
+    driver: bridge
+  backend_net:
+    driver: bridge
+    internal: true           # no outbound/inbound access outside Docker
+
+volumes:
+  db_data:

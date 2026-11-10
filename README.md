@@ -111,7 +111,7 @@ Expected services:
 | app-backend | Backend |
 | app-db | PostgreSQL |
 
-## 8. View Container Logs
+## 8. View Container Logs (optional)
 
 View all logs:
 
@@ -155,7 +155,7 @@ Internal Docker address: http://backend:5000
 
 The backend and database ports are not currently published to the Windows host.
 
-## 10. Restart Containers
+## 10. Restart Containers 
 
 Restart all services:
 
